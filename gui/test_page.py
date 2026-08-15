@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QLineEdit, QFileDialog, QMessageBox, QGroupBox, QFormLayout,
     QTextEdit, QProgressBar, QTableWidget, QTableWidgetItem, QHeaderView,
     QAbstractItemView, QSplitter, QDialog, QApplication, QTabWidget,
+    QSizePolicy,
 )
 
 from gui.model_tester import (
@@ -15,6 +16,10 @@ from gui.model_tester import (
 from utils.project_manager import ProjectManager
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+
+# 预览区上限，避免宽图/高图把窗口撑开导致宽度抖动
+PREVIEW_MAX_W = 480
+PREVIEW_MAX_H = 200
 
 
 def _norm_path(path: str) -> str:
@@ -331,7 +336,11 @@ class TestPage(QWidget):
 
         self.preview_label = QLabel("预览")
         self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.preview_label.setMinimumHeight(160)
+        self.preview_label.setFixedHeight(PREVIEW_MAX_H)
+        self.preview_label.setMaximumWidth(PREVIEW_MAX_W)
+        self.preview_label.setSizePolicy(
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed
+        )
         self.preview_label.setStyleSheet(
             "QLabel { background: #1e1e1e; border: 1px solid #555; color: #bbb; }"
         )
@@ -589,12 +598,17 @@ class TestPage(QWidget):
         self._last_image_path = path
         pixmap = QPixmap(path)
         if pixmap.isNull():
+            self.preview_label.clear()
             self.preview_label.setText("无法预览")
             return
+        # 按固定上限缩放，不依赖当前控件尺寸，避免布局反馈导致窗口宽度变化
+        box_w = min(PREVIEW_MAX_W, max(1, self.preview_label.width()))
+        box_h = min(PREVIEW_MAX_H, max(1, self.preview_label.height() or PREVIEW_MAX_H))
         scaled = pixmap.scaled(
-            QSize(max(280, self.preview_label.width()), max(140, self.preview_label.height())),
+            QSize(box_w, box_h),
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
+        self.preview_label.setText("")
         self.preview_label.setPixmap(scaled)
         self.drop_zone.setText(os.path.basename(path))
