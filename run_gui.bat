@@ -1,6 +1,7 @@
 @echo off
 setlocal EnableExtensions
-cd /d "%~dp0"
+set "ROOT=%~dp0"
+cd /d "%ROOT%"
 call :main
 set "ERR=%ERRORLEVEL%"
 echo.
@@ -8,7 +9,7 @@ pause
 endlocal & exit /b %ERR%
 
 :main
-set "PY=%~dp0runtime\python.exe"
+set "PY=%ROOT%runtime\python.exe"
 set "PIP_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple"
 set "PYTHONNOUSERSITE=1"
 set "PYTHONUTF8=1"
@@ -17,8 +18,11 @@ echo ========================================
 echo   dddd_trainer GUI launcher
 echo ========================================
 echo.
+echo ROOT=%ROOT%
+echo PY=%PY%
+echo.
 
-if not exist "%~dp0gui_app.py" (
+if not exist "%ROOT%gui_app.py" (
   echo [ERROR] gui_app.py not found
   exit /b 1
 )
@@ -38,9 +42,9 @@ if errorlevel 1 (
 
 "%PY%" -m pip --version >nul 2>nul
 if errorlevel 1 (
-  if exist "%~dp0runtime\get-pip.py" (
+  if exist "%ROOT%runtime\get-pip.py" (
     echo [INFO] Installing pip via get-pip.py ...
-    "%PY%" "%~dp0runtime\get-pip.py" --no-warn-script-location
+    "%PY%" "%ROOT%runtime\get-pip.py" --no-warn-script-location
   )
 )
 "%PY%" -m pip --version >nul 2>nul
@@ -52,7 +56,7 @@ if errorlevel 1 (
 "%PY%" -c "import fire,loguru,yaml,tqdm,numpy,PIL,PyQt6" >nul 2>nul
 if errorlevel 1 (
   echo [INFO] Installing base deps ...
-  if not exist "%~dp0requirements.txt" (
+  if not exist "%ROOT%requirements.txt" (
     echo [ERROR] requirements.txt not found
     exit /b 1
   )
@@ -61,7 +65,7 @@ if errorlevel 1 (
     echo [ERROR] Failed to upgrade pip
     exit /b 1
   )
-  set "NUMPY_WHL=%~dp0dist\numpy-1.24.4-cp310-cp310-win_amd64.whl"
+  set "NUMPY_WHL=%ROOT%dist\numpy-1.24.4-cp310-cp310-win_amd64.whl"
   if exist "%NUMPY_WHL%" (
     echo [INFO] Offline numpy wheel
     "%PY%" -m pip install "%NUMPY_WHL%" --no-cache-dir
@@ -73,7 +77,7 @@ if errorlevel 1 (
     echo [ERROR] Failed to install numpy
     exit /b 1
   )
-  "%PY%" -m pip install -r "%~dp0requirements.txt" -i "%PIP_MIRROR%"
+  "%PY%" -m pip install -r "%ROOT%requirements.txt" -i "%PIP_MIRROR%"
   if errorlevel 1 (
     echo [ERROR] Failed to install requirements
     exit /b 1
@@ -92,7 +96,7 @@ if errorlevel 1 (
 
 echo.
 echo [INFO] Starting GUI ...
-"%PY%" "%~dp0gui_app.py"
+"%PY%" "%ROOT%gui_app.py"
 set "RC=%ERRORLEVEL%"
 if not "%RC%"=="0" (
   echo [ERROR] GUI exited with code %RC%

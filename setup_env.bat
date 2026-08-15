@@ -1,6 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
-cd /d "%~dp0"
+set "ROOT=%~dp0"
+cd /d "%ROOT%"
 call :main
 set "ERR=!ERRORLEVEL!"
 echo.
@@ -8,9 +9,8 @@ pause
 endlocal & exit /b %ERR%
 
 :main
-set "ROOT=%cd%"
-set "EMBED_ZIP=%ROOT%\dist\python-3.10.11-embed-amd64.zip"
-set "RUNTIME=%ROOT%\runtime"
+set "EMBED_ZIP=%ROOT%dist\python-3.10.11-embed-amd64.zip"
+set "RUNTIME=%ROOT%runtime"
 set "PY=%RUNTIME%\python.exe"
 set "PIP_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple"
 

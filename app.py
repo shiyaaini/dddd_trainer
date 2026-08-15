@@ -1,5 +1,12 @@
+import os
+import sys
 import fire
 import multiprocessing as mp
+
+# Embed Python (runtime\) does not put cwd on sys.path; ensure project root is importable.
+ROOT = os.path.dirname(os.path.abspath(__file__))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
 from loguru import logger
 from utils import project_manager
