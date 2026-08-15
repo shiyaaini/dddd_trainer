@@ -1,0 +1,10 @@
+numpy==1.24.4
+fire
+loguru
+pyyaml
+tqdm
+pillow==9.5.0
+PyQt6
+ddddocr
+opencv-python<4.10
+onnx
