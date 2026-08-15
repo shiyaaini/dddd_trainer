@@ -10,7 +10,12 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# Project ships offline Windows packages under dist/ (embed Python + numpy wheel).
+# Ignore only temp extract dirs and unused source tarballs.
+/dist/_embed_extract/
+/dist/_embed_check/
+/dist/**/__pycache__/
+/dist/*.tar.gz
 downloads/
 eggs/
 .eggs/

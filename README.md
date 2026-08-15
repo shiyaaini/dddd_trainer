@@ -26,7 +26,9 @@ Fork / enhancement of [sml2h3/dddd_trainer](https://github.com/sml2h3/dddd_train
 
 ### Windows 一键环境（推荐）
 
-1. 将 `python-3.10.11-embed-amd64.zip` 放到 `dist\`（可选：`numpy-1.24.4-cp310-cp310-win_amd64.whl` 供离线装 numpy）
+1. 确保 `dist\` 中有：
+   - `python-3.10.11-embed-amd64.zip`（绿色 Python）
+   - `numpy-1.24.4-cp310-cp310-win_amd64.whl`（离线 numpy，推荐随仓库上传）
 2. 双击 **`setup_env.bat`**  
    - 解压绿色 Python 到根目录 `runtime\`  
    - 安装 `requirements.txt` 基础依赖（含 PyQt6 等）  
@@ -34,7 +36,7 @@ Fork / enhancement of [sml2h3/dddd_trainer](https://github.com/sml2h3/dddd_train
 3. 双击 **`run_gui.bat`** 启动界面  
 4. 在 GUI「环境检查」页按显卡一键安装 / 修复 PyTorch
 
-整份工程目录（含 `runtime\`）可直接拷贝给他人使用。
+整份工程目录（含 `runtime\`）可直接拷贝给他人使用。`runtime\` 本身不进 Git，由 `setup_env.bat` 生成。
 
 ### 常规安装（已有系统 Python）
 
@@ -177,7 +179,9 @@ PyTorch trainer for captcha / text OCR models used with **ddddocr**. Supports **
 
 ### Windows one-click setup (recommended)
 
-1. Place `python-3.10.11-embed-amd64.zip` under `dist\` (optional: `numpy-1.24.4-cp310-cp310-win_amd64.whl` for offline NumPy)
+1. Make sure `dist\` contains:
+   - `python-3.10.11-embed-amd64.zip` (embed Python)
+   - `numpy-1.24.4-cp310-cp310-win_amd64.whl` (offline NumPy; recommended in the repo)
 2. Run **`setup_env.bat`**  
    - Extracts embed Python to `runtime\`  
    - Installs base deps from `requirements.txt` (PyQt6, etc.)  
@@ -185,7 +189,7 @@ PyTorch trainer for captcha / text OCR models used with **ddddocr**. Supports **
 3. Run **`run_gui.bat`** to open the GUI  
 4. Install / repair PyTorch in the GUI **Env Check** tab
 
-You can copy the whole project folder (including `runtime\`) to other machines.
+You can copy the whole project folder (including `runtime\`) to other machines. `runtime\` is gitignored and created by `setup_env.bat`.
 
 ### Standard install
 
